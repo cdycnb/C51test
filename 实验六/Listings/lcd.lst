@@ -1,0 +1,169 @@
+C51 COMPILER V9.54   LCD                                                                   05/21/2025 18:05:16 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE LCD
+OBJECT MODULE PLACED IN .\Objects\lcd.obj
+COMPILER INVOKED BY: F:\keil5\core\C51\BIN\C51.EXE lcd.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\lc
+                    -d.lst) TABS(2) OBJECT(.\Objects\lcd.obj)
+
+line level    source
+
+   1          #include "lcd.h"
+   2          
+   3          /*汉字字模数据*/
+   4          
+   5          
+   6          /*延时函数*/
+   7          void Delay(unsigned int xms)    //@12.000MHz
+   8          {
+   9   1        unsigned char i, j;
+  10   1        while(xms--)
+  11   1        {
+  12   2          i = 2;
+  13   2          j = 239;
+  14   2          do
+  15   2          {
+  16   3            while (--j);
+  17   3          } while (--i);
+  18   2        }
+  19   1      }
+  20          
+  21          /*检测忙状态*/
+  22          void CheckBusy(void)
+  23          {
+  24   1          LCD_DATA=0X00;
+  25   1          RS=0;
+  26   1          RW=1;
+  27   1          E=1;
+  28   1        Delay(10);
+  29   1          while(LCD_DATA&0x80);
+  30   1          E=0;
+  31   1      }
+  32          
+  33          /*写命令*/
+  34          void WriteCommand(unsigned char cmd)
+  35          {
+  36   1        CheckBusy();
+  37   1          RS=0;
+  38   1          RW=0;
+  39   1          E=1;
+  40   1          LCD_DATA=cmd;
+  41   1          E=0;
+  42   1        Delay(10);
+  43   1      }
+  44          
+  45          /*写数据*/
+  46          void WriteData(unsigned char dat)
+  47          {
+  48   1        CheckBusy();
+  49   1          RS=1;
+  50   1          RW=0;
+  51   1          E=1;
+  52   1          LCD_DATA=dat;
+  53   1          E=0;
+  54   1        Delay(10);
+C51 COMPILER V9.54   LCD                                                                   05/21/2025 18:05:16 PAGE 2   
+
+  55   1      }
+  56          
+  57          /*设置页地址*/
+  58          void SetPage(unsigned char page)
+  59          {
+  60   1        page|=0xB8;
+  61   1        WriteCommand(page); 
+  62   1      }
+  63          
+  64          /*设置列地址*/
+  65          void SetColumn(unsigned char column)
+  66          {
+  67   1        column|=0x40;
+  68   1        WriteCommand(column);
+  69   1      }
+  70          
+  71          /*选择屏幕*/
+  72          void SelectScreen(unsigned char screen)
+  73          {
+  74   1        switch(screen)
+  75   1        {
+  76   2          case 0:CS1=0;CS2=0;break;
+  77   2          case 1:CS1=0;CS2=1;break;
+  78   2          case 2:CS1=1;CS2=0;break;
+  79   2          default:CS1=0;CS2=0;break;
+  80   2        }
+  81   1      }
+  82          
+  83          /*LCD初始化*/
+  84          void LCD_Init(void)
+  85          {
+  86   1        CheckBusy();
+  87   1        Delay(10);
+  88   1        SelectScreen(0);
+  89   1        Delay(10);
+  90   1        WriteCommand(0x01);
+  91   1        Delay(10);
+  92   1        WriteCommand(0x0C);
+  93   1        Delay(10);
+  94   1        WriteCommand(0x06);
+  95   1        Delay(10);
+  96   1      }
+  97          
+  98          /*显示字符*/
+  99          void Display_char(unsigned char screen,unsigned char page,unsigned char column,unsigned char *p)
+ 100          {
+ 101   1        unsigned char i=0;
+ 102   1        SelectScreen(screen);
+ 103   1        SetPage(page);
+ 104   1        SetColumn(column);
+ 105   1        for(i=0;i<16;i++)
+ 106   1        {
+ 107   2          WriteData(p[i]);
+ 108   2        }
+ 109   1        SetPage(page+1);
+ 110   1        SetColumn(column);
+ 111   1        for(i=0;i<16;i++)
+ 112   1        {
+ 113   2          WriteData(p[i+16]);
+ 114   2        }
+ 115   1      }
+ 116          
+C51 COMPILER V9.54   LCD                                                                   05/21/2025 18:05:16 PAGE 3   
+
+ 117          /*清屏*/
+ 118          void LCD_ClearScreen(void) 
+ 119          {
+ 120   1          WriteCommand(0x01);
+ 121   1          Delay(1);
+ 122   1      }
+ 123          
+ 124          /*显示字符串*/
+ 125          void LCD_ShowString(unsigned char screen,unsigned char page,unsigned char column,char *str)
+ 126          {
+ 127   1        unsigned char i=0;
+ 128   1        SelectScreen(screen);
+ 129   1        SetPage(page);
+ 130   1        SetColumn(column);
+ 131   1        for(i=0;i<8;i++)
+ 132   1        {
+ 133   2          WriteData(str[i]);
+ 134   2        }
+ 135   1        SetPage(page+1);
+ 136   1        SetColumn(column);
+ 137   1        for(i=0;i<8;i++)
+ 138   1        {
+ 139   2          WriteData(str[i+8]);
+ 140   2        }
+ 141   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    364    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      14
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

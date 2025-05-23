@@ -1,0 +1,5 @@
+".\Objects\adc0809_driver.obj",
+".\Objects\display.obj",
+".\Objects\实验七.obj" 
+TO ".\Objects\实验七" 
+PRINT(".\Listings\实验七.m51")

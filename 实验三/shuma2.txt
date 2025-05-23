@@ -1,0 +1,45 @@
+#include <intrins.h>
+#include <reg51.h>
+unsigned char NUM[] = {0xc0,0xf9,0xa4,0xb0, 0x99,0x92,0x82,0xf8,0x80,0x90, 0xff};
+
+void Timer0Init()
+{
+    // 1. 对TMOD赋值，确定T0为工作方式1，仅TR0打开启动
+    TMOD |= 0x01;  // 低四位为 0001，GATE=0仅TR0启动，C/T=0定时模式，M1M0=01工作方式1
+    // 2. 根据定时时间计算初值，赋初值
+    TH0 = 0xFC;
+    TL0 = 0x18;
+    // 3. 使用中断，打开总中断，打开定时器中断
+    EA=1;
+    ET0=1;
+    // 4. 置位TR0，启动定时
+    TR0=1;
+}
+
+void main()
+{
+    Timer0Init();  // 外部中断0初始化
+    while(1);
+}
+
+void Timer0() interrupt 1
+{
+    static u16 i;  // 统计定时1ms的次数
+    TH0 = 0xFC;
+    TL0 = 0x18;
+    i++; 
+	unsigned char j=0x01;
+    if(1000 == i)  // 如果定时1ms的次数达到了1000次表示过了1s
+    {
+		i=0;
+		for(j=0;j<8;j++)  
+         {  led(a,NUM[j+1]);	
+		 	delay(10);
+			a = _crol_(a,1);
+    }
+}
+void led(unsigned char com, unsigned char number)
+{		
+         P2 = com;
+       	 P0 = number;    
+}

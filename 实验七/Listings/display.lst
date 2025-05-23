@@ -1,0 +1,63 @@
+C51 COMPILER V9.54   DISPLAY                                                               05/21/2025 19:37:25 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE DISPLAY
+OBJECT MODULE PLACED IN .\Objects\display.obj
+COMPILER INVOKED BY: F:\keil5\core\C51\BIN\C51.EXE display.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
+                    -s\display.lst) TABS(2) OBJECT(.\Objects\display.obj)
+
+line level    source
+
+   1          #include "display.h"
+   2          
+   3          // 共阳极数码管段码表：0-9
+   4          uchar code mode[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90};
+   5          
+   6          /* 数码管显示函数 */
+   7          void Display(uint value)
+   8          {
+   9   1          uint a, b, c;
+  10   1          // 将0-255的ADC值转换为0.00-5.00V的显示值
+  11   1          a = value / 51;             //整数部分
+  12   1          b = (value * 10 / 51) % 10; //小数点后第一位
+  13   1          c = (value * 100 / 51) % 10;//小数点后第二位
+  14   1          
+  15   1          // 位选和段选控制，动态显示4位数码管
+  16   1          L3=0; L2=1; L1=1; L0=1; //选中第4位
+  17   1          P1 = 0x00;           //显示"0"
+  18   1          Delaytms(2);            //延时2ms
+  19   1          
+  20   1          L3=1; L2=0; L1=1; L0=1; //选中第3位
+  21   1          P1=mode[a]&0x7f;        //显示整数部分，并点亮小数点
+  22   1          Delaytms(2);
+  23   1          
+  24   1          L3=1; L2=1; L1=0; L0=1; //选中第2位
+  25   1          P1= mode[b];            //显示小数第一位
+  26   1          Delaytms(2);
+  27   1          
+  28   1          L3=1; L2=1; L1=1; L0=0; //选中第1位
+  29   1          P1=mode[c];             //显示小数第二位
+  30   1          Delaytms(2);
+  31   1      }
+  32          
+  33          /* 延时函数 */
+  34          static void Delaytms(uint time)
+  35          {
+  36   1          uint i,j;
+  37   1          for (i = 0; i < time; i++)
+  38   1              for (j = 0; j < 125; j++); //1ms基准延时
+  39   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    207    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

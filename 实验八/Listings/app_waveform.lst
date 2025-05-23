@@ -1,0 +1,55 @@
+C51 COMPILER V9.54   APP_WAVEFORM                                                          05/21/2025 20:02:13 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE APP_WAVEFORM
+OBJECT MODULE PLACED IN .\Objects\app_waveform.obj
+COMPILER INVOKED BY: F:\keil5\core\C51\BIN\C51.EXE app_waveform.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Li
+                    -stings\app_waveform.lst) TABS(2) OBJECT(.\Objects\app_waveform.obj)
+
+line level    source
+
+   1          #include "app_waveform.h"
+   2          #include "dac0832_driver.h"
+   3          
+   4          // 全局变量定义
+   5          bit flag = 0; // 状态量：0=上升，1=下降
+   6          unsigned char counter = 0; // 软件计数器
+   7          void GenerateWaveform(void)//波形函数
+   8          {
+   9   1          static unsigned char i; // 输入量D
+  10   1          
+  11   1          if(counter == 20)
+  12   1          {
+  13   2              counter = 0;
+  14   2              if(flag == 0)//需要上升
+  15   2              {
+  16   3                  for(i=0; i<=20; i++)    
+  17   3                  {
+  18   4                      DAC0832_Convert(i);//递增实现
+  19   4                  }     
+  20   3                  flag = 1;
+  21   3              }
+  22   2              else//需要下降
+  23   2              { 
+  24   3                  for(i=19; i>=0; i--)
+  25   3                  {
+  26   4                      DAC0832_Convert(i);
+  27   4                  }
+  28   3                  flag = 0;
+  29   3              }
+  30   2          }
+  31   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     50    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

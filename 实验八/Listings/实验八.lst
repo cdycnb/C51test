@@ -1,0 +1,56 @@
+C51 COMPILER V9.54   ______                                                                05/21/2025 20:02:13 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE ______
+OBJECT MODULE PLACED IN .\Objects\ʵ���.obj
+COMPILER INVOKED BY: F:\keil5\core\C51\BIN\C51.EXE ʵ���.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings
+                    -\ʵ���.lst) TABS(2) OBJECT(.\Objects\ʵ���.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include "dac0832_driver.h"
+   3          #include "app_waveform.h"
+   4          
+   5          /***********变量定义********************************/
+   6          unsigned char timer0_peroid=200;
+   7          
+   8          //主函数，初始化DAC0832并配置定时器0中断
+   9          void main(void)
+  10          { 
+  11   1          DAC0832_Init();
+  12   1          TMOD=0x02;//in mode 2自动重装模式
+  13   1          TH0=0-timer0_peroid;//
+  14   1          TL0=0-timer0_peroid;//56
+  15   1          TR0=1;//启动T0计时器
+  16   1          PT0=1;//高级中断（优先级高于T0中断定时器0）
+  17   1          ET0=1;//允许T0中断
+  18   1          EA=1;//打开中断总开关
+  19   1          
+  20   1          while(1)
+  21   1          {
+  22   2              GenerateWaveform();
+  23   2          }
+  24   1      }
+  25          
+  26          //timer0中断函数，用于定时更新波形数据
+  27          void timer_0 () interrupt 1
+  28          {
+  29   1          TH0=0-timer0_peroid;//56
+  30   1          TL0=0-timer0_peroid;//56
+  31   1          counter++;
+  32   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     42    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

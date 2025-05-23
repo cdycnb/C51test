@@ -1,0 +1,79 @@
+C51 COMPILER V9.54   ADC0809_DRIVER                                                        05/21/2025 20:14:49 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE ADC0809_DRIVER
+OBJECT MODULE PLACED IN .\Objects\adc0809_driver.obj
+COMPILER INVOKED BY: F:\keil5\core\C51\BIN\C51.EXE adc0809_driver.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\
+                    -Listings\adc0809_driver.lst) TABS(2) OBJECT(.\Objects\adc0809_driver.obj)
+
+line level    source
+
+   1          #include "adc0809_driver.h"
+   2          
+   3          /* 初始化函数 */
+   4          void ADC0809_Init(void)
+   5          {
+   6   1          // 初始化ADC0809控制引脚
+   7   1          CS=0;
+   8   1          CLK=0;
+   9   1          WRITE=1;        //内部寄存器清零
+  10   1          EOC=1;          //转换结束标志(未开始)
+  11   1          READ=0;
+  12   1          
+  13   1          //配置定时器0为模式2(自动重装)
+  14   1          TMOD=0x02;      //0000_0010 8位定时器，自动重装
+  15   1          TH0=200;        //定时初值
+  16   1          TL0=200;        //自动重装值
+  17   1          EA=1;           //开总中断
+  18   1          ET0=1;          //开定时器0中断
+  19   1          TR0=1;          //启动定时器0
+  20   1      }
+  21          
+  22          /* 定时器0中断服务函数 */
+  23          void Timer0_ISR() interrupt 1//定时器0产生中断时
+  24          {
+  25   1          // 产生ADC0809所需时钟信号
+  26   1          CLK=!CLK;
+  27   1      }
+  28          static void Delaytms(uint time)
+  29          {
+  30   1          uint i,j = 0;
+  31   1          for (i = 0;i < time;i++)
+  32   1              for (;j < 125;j++);
+  33   1      }
+  34          /* 读取ADC值 */
+  35          uint ADC0809_Read(void)
+  36          {
+  37   1          uint value;
+  38   1          
+  39   1          // 启动ADC0809转换
+  40   1          CS=0;//片选信号，选择ADC0809
+  41   1          READ=1;//不读取数据
+  42   1          WRITE=1;    //START引脚先置高
+  43   1          Delaytms(1);
+  44   1          WRITE=0;    //START引脚下降沿触发转换
+  45   1          Delaytms(1);
+  46   1          WRITE=1;//一次转化结束
+  47   1          
+  48   1          while(EOC==0);  //等待转换完成(EOC变高)
+  49   1          READ=0;         //使能输出，读取转换结果
+  50   1          value=P0;       //读取ADC转换值
+  51   1          
+  52   1          return value;
+  53   1      }
+
+C51 COMPILER V9.54   ADC0809_DRIVER                                                        05/21/2025 20:14:49 PAGE 2   
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     95    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
