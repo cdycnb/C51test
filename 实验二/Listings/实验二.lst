@@ -1,0 +1,52 @@
+C51 COMPILER V9.54   ______                                                                05/14/2025 14:34:37 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE ______
+OBJECT MODULE PLACED IN .\Objects\实验二.obj
+COMPILER INVOKED BY: F:\keil5\core\C51\BIN\C51.EXE 实验二.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings
+                    -\实验二.lst) TABS(2) OBJECT(.\Objects\实验二.obj)
+
+line level    source
+
+   1          #include <stdio.h>
+   2          #include <reg51.h>
+   3          
+   4          void delay(unsigned int time) {
+   5   1          unsigned int i, j;
+   6   1          for (i = 0; i < time; i++) {
+   7   2              for (j = 0; j < 1275; j++);
+   8   2          }
+   9   1      }
+  10          
+  11          void main() {
+  12   1          unsigned int i;
+  13   1          P0 = 0x00;
+  14   1          delay(1);
+  15   1          P0 = 0x01;
+  16   1          while (1)
+  17   1          {
+  18   2              if(P0 == 0x80){
+  19   3                  P0 = 0x01;
+  20   3                delay(100);
+  21   3              }
+  22   2              else{
+  23   3                  P0 = P0<<1 | 0x00;
+  24   3                  delay(100);
+  25   3              }
+  26   2          }
+  27   1      }
+*** WARNING C280 IN LINE 12 OF 实验二.c: 'i': unreferenced local variable
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     76    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

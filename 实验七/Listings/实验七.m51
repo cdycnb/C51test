@@ -1,0 +1,273 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        05/21/2025  20:14:50  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+F:\KEIL5\CORE\C51\BIN\BL51.EXE .\Objects\adc0809_driver.obj, .\Objects\display.obj, .\Objects\实验七.obj TO .\Objects\实
+>> 验七 PRINT (.\Listings\实验七.m51)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\adc0809_driver.obj (ADC0809_DRIVER)
+  .\Objects\display.obj (DISPLAY)
+  .\Objects\实验七.obj (______)
+  F:\KEIL5\CORE\C51\LIB\C51S.LIB (?C_STARTUP)
+  F:\KEIL5\CORE\C51\LIB\C51S.LIB (?C?IMUL)
+  F:\KEIL5\CORE\C51\LIB\C51S.LIB (?C?UIDIV)
+  F:\KEIL5\CORE\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\实验七 (ADC0809_DRIVER)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0006H     UNIT         _DATA_GROUP_
+            DATA    000EH     0002H     UNIT         ?DT?______
+            IDATA   0010H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0008H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+                    000EH     07F2H                  *** GAP ***
+            CODE    0800H     00A9H     UNIT         ?PR?_DISPLAY?DISPLAY
+            CODE    08A9H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0935H     0067H     UNIT         ?C?LIB_CODE
+            CODE    099CH     0026H     UNIT         ?PR?_DELAYTMS?DISPLAY
+            CODE    09C2H     0024H     UNIT         ?PR?_DELAYTMS?ADC0809_DRIVER
+            CODE    09E6H     001EH     UNIT         ?PR?ADC0809_READ?ADC0809_DRIVER
+            CODE    0A04H     001AH     UNIT         ?PR?ADC0809_INIT?ADC0809_DRIVER
+            CODE    0A1EH     000FH     UNIT         ?PR?MAIN?______
+            CODE    0A2DH     000AH     UNIT         ?CO?DISPLAY
+            CODE    0A37H     0005H     UNIT         ?C_INITSEG
+            CODE    0A3CH     0003H     UNIT         ?PR?TIMER0_ISR?ADC0809_DRIVER
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\实验七 (ADC0809_DRIVER)
+
+
+SEGMENT                                   DATA_GROUP 
+  +--> CALLED SEGMENT                   START    LENGTH
+-------------------------------------------------------
+?C_C51STARTUP                           -----    -----
+  +--> ?PR?MAIN?______
+  +--> ?C_INITSEG
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/21/2025  20:14:50  PAGE 2
+
+
+
+?PR?MAIN?______                         -----    -----
+  +--> ?PR?ADC0809_INIT?ADC0809_DRIVER
+  +--> ?PR?ADC0809_READ?ADC0809_DRIVER
+  +--> ?PR?_DISPLAY?DISPLAY
+
+?PR?ADC0809_READ?ADC0809_DRIVER         -----    -----
+  +--> ?PR?_DELAYTMS?ADC0809_DRIVER
+
+?PR?_DISPLAY?DISPLAY                    0008H    0006H
+  +--> ?PR?_DELAYTMS?DISPLAY
+  +--> ?CO?DISPLAY
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\实验七 (ADC0809_DRIVER)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ADC0809_DRIVER
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  C:0A3CH         PUBLIC        Timer0_ISR
+  B:00A8H.7       PUBLIC        EA
+  B:00B0H.6       PUBLIC        WRITE
+  D:00A8H         PUBLIC        IE
+  C:0A04H         PUBLIC        ADC0809_Init
+  B:00A0H.7       PUBLIC        CS
+  D:00B8H         PUBLIC        IP
+  B:00B0H.7       PUBLIC        READ
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  C:09C2H         SYMBOL        _Delaytms
+  B:00A8H.1       PUBLIC        ET0
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  B:0088H.4       PUBLIC        TR0
+  B:00B0H.0       PUBLIC        EOC
+  B:00B0H.1       PUBLIC        CLK
+  D:00C8H         PUBLIC        T2CON
+  C:09E6H         PUBLIC        ADC0809_Read
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          ADC0809_INIT
+  C:0A04H         LINE#         4
+  C:0A04H         LINE#         5
+  C:0A04H         LINE#         7
+  C:0A06H         LINE#         8
+  C:0A08H         LINE#         9
+  C:0A0AH         LINE#         10
+  C:0A0CH         LINE#         11
+  C:0A0EH         LINE#         14
+  C:0A11H         LINE#         15
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/21/2025  20:14:50  PAGE 3
+
+
+  C:0A14H         LINE#         16
+  C:0A17H         LINE#         17
+  C:0A19H         LINE#         18
+  C:0A1BH         LINE#         19
+  C:0A1DH         LINE#         20
+  -------         ENDPROC       ADC0809_INIT
+  -------         PROC          TIMER0_ISR
+  C:0A3CH         LINE#         23
+  C:0A3CH         LINE#         26
+  C:0A3EH         LINE#         27
+  -------         ENDPROC       TIMER0_ISR
+  -------         PROC          _DELAYTMS
+  D:0006H         SYMBOL        time
+  -------         DO            
+  D:0002H         SYMBOL        i
+  D:0004H         SYMBOL        j
+  -------         ENDDO         
+  C:09C2H         LINE#         28
+  C:09C2H         LINE#         29
+  C:09C2H         LINE#         30
+  C:09C5H         LINE#         31
+  C:09CEH         LINE#         32
+  C:09E5H         LINE#         33
+  -------         ENDPROC       _DELAYTMS
+  -------         PROC          ADC0809_READ
+  -------         DO            
+  D:0006H         SYMBOL        value
+  -------         ENDDO         
+  C:09E6H         LINE#         35
+  C:09E6H         LINE#         36
+  C:09E6H         LINE#         40
+  C:09E8H         LINE#         41
+  C:09EAH         LINE#         42
+  C:09ECH         LINE#         43
+  C:09F3H         LINE#         44
+  C:09F5H         LINE#         45
+  C:09F8H         LINE#         46
+  C:09FAH         LINE#         48
+  C:09FDH         LINE#         49
+  C:09FFH         LINE#         50
+  C:0A03H         LINE#         52
+  C:0A03H         LINE#         53
+  -------         ENDPROC       ADC0809_READ
+  -------         ENDMOD        ADC0809_DRIVER
+
+  -------         MODULE        DISPLAY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  B:00A0H.0       PUBLIC        L3
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  C:0A2DH         PUBLIC        mode
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:09A2H         SYMBOL        _Delaytms
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/21/2025  20:14:50  PAGE 4
+
+
+  C:0800H         PUBLIC        _Display
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  B:00A0H.3       PUBLIC        L0
+  B:00A0H.2       PUBLIC        L1
+  B:00A0H.1       PUBLIC        L2
+  -------         PROC          _DISPLAY
+  D:0002H         SYMBOL        value
+  -------         DO            
+  D:0008H         SYMBOL        a
+  D:000AH         SYMBOL        b
+  D:000CH         SYMBOL        c
+  -------         ENDDO         
+  C:0800H         LINE#         7
+  C:0804H         LINE#         8
+  C:0804H         LINE#         11
+  C:080FH         LINE#         12
+  C:082AH         LINE#         13
+  C:0845H         LINE#         16
+  C:084DH         LINE#         17
+  C:0850H         LINE#         18
+  C:0856H         LINE#         20
+  C:085EH         LINE#         21
+  C:086EH         LINE#         22
+  C:0871H         LINE#         24
+  C:0879H         LINE#         25
+  C:0887H         LINE#         26
+  C:088AH         LINE#         28
+  C:0892H         LINE#         29
+  C:08A2H         LINE#         30
+  -------         ENDPROC       _DISPLAY
+  -------         PROC          L?0011
+  -------         ENDPROC       L?0011
+  -------         PROC          _DELAYTMS
+  D:0006H         SYMBOL        time
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:0002H         SYMBOL        j
+  -------         ENDDO         
+  C:09A2H         LINE#         34
+  C:09A2H         LINE#         35
+  C:09A2H         LINE#         37
+  C:09ACH         LINE#         38
+  C:09C1H         LINE#         39
+  -------         ENDPROC       _DELAYTMS
+  -------         ENDMOD        DISPLAY
+
+  -------         MODULE        ______
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  C:0A1EH         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/21/2025  20:14:50  PAGE 5
+
+
+  D:000EH         PUBLIC        V
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  C:0A1EH         LINE#         8
+  C:0A1EH         LINE#         9
+  C:0A1EH         LINE#         11
+  C:0A21H         LINE#         13
+  C:0A21H         LINE#         14
+  C:0A21H         LINE#         16
+  C:0A28H         LINE#         17
+  C:0A2BH         LINE#         18
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        ______
+
+  -------         MODULE        ?C?IMUL
+  C:0935H         PUBLIC        ?C?IMUL
+  -------         ENDMOD        ?C?IMUL
+
+  -------         MODULE        ?C?UIDIV
+  C:0947H         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 014EH BYTE (16%) *
+******************************************************************************
+
+Program Size: data=17.0 xdata=0 code=581
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

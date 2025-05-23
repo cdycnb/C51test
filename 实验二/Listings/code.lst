@@ -1,0 +1,150 @@
+C51 COMPILER V9.54   CODE                                                                  05/14/2025 14:47:39 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE CODE
+OBJECT MODULE PLACED IN .\Objects\code.obj
+COMPILER INVOKED BY: F:\keil5\core\C51\BIN\C51.EXE code.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\c
+                    -ode.lst) TABS(2) OBJECT(.\Objects\code.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          
+   3          // 按键定义
+   4          sbit KEY1 = P3^0;  // 亮度25%
+   5          sbit KEY2 = P3^1;  // 亮度50%
+   6          sbit KEY3 = P3^2;  // 亮度75%
+   7          sbit KEY4 = P3^3;  // 亮度100%
+   8          
+   9          // LED输出端口
+  10          #define LED P2
+  11          
+  12          // 全局变量
+  13          unsigned char brightness = 4;  // 默认亮度等级4（100%）
+  14          unsigned char led_pattern = 0xfe;  // 初始LED模式（第一个LED亮）
+  15          
+  16          // 延时函数 - 基准延时单位
+  17          void delay(unsigned int time) {
+  18   1          unsigned int i, j;
+  19   1          for(i=0; i<time; i++)
+  20   1              for(j=0; j<1275; j++);  // 基准延时单位
+  21   1      }
+  22          
+  23          // 按键检测与消抖处理
+  24          void check_keys() {
+  25   1          // 检测按键1 - 25%亮度
+  26   1          if(!KEY1) { 
+  27   2              delay(20);  // 消抖延时
+  28   2              if(!KEY1) { 
+  29   3                  brightness = 1;  // 设置亮度等级1
+  30   3                  while(!KEY1);  // 等待按键释放
+  31   3              }
+  32   2          }
+  33   1          
+  34   1          // 检测按键2 - 50%亮度
+  35   1          if(!KEY2) { 
+  36   2              delay(20);  // 消抖延时
+  37   2              if(!KEY2) { 
+  38   3                  brightness = 2;  // 设置亮度等级2
+  39   3                  while(!KEY2);  // 等待按键释放
+  40   3              }
+  41   2          }
+  42   1          
+  43   1          // 检测按键3 - 75%亮度
+  44   1          if(!KEY3) { 
+  45   2              delay(20);  // 消抖延时
+  46   2              if(!KEY3) { 
+  47   3                  brightness = 3;  // 设置亮度等级3
+  48   3                  while(!KEY3);  // 等待按键释放
+  49   3              }
+  50   2          }
+  51   1          
+  52   1          // 检测按键4 - 100%亮度
+  53   1          if(!KEY4) { 
+  54   2              delay(20);  // 消抖延时
+C51 COMPILER V9.54   CODE                                                                  05/14/2025 14:47:39 PAGE 2   
+
+  55   2              if(!KEY4) { 
+  56   3                  brightness = 4;  // 设置亮度等级4
+  57   3                  while(!KEY4);  // 等待按键释放
+  58   3              }
+  59   2          }
+  60   1      }
+  61          
+  62          // 亮度控制延时函数
+  63          void brightness_delay() {
+  64   1          unsigned int i;
+  65   1          
+  66   1          // 根据亮度等级调整PWM占空比
+  67   1          for(i = 0; i < 100; i++) {
+  68   2              switch(brightness) {
+  69   3                  case 1:  // 25%亮度
+  70   3                      LED = led_pattern;  // 输出LED模式
+  71   3                      delay(1);           // 亮1个单位
+  72   3                      LED = 0xFF;         // 熄灭所有LED
+  73   3                      delay(3);           // 灭3个单位
+  74   3                      break;
+  75   3                      
+  76   3                  case 2:  // 50%亮度
+  77   3                      LED = led_pattern;  // 输出LED模式
+  78   3                      delay(2);           // 亮2个单位
+  79   3                      LED = 0xFF;         // 熄灭所有LED
+  80   3                      delay(2);           // 灭2个单位
+  81   3                      break;
+  82   3                      
+  83   3                  case 3:  // 75%亮度
+  84   3                      LED = led_pattern;  // 输出LED模式
+  85   3                      delay(3);           // 亮3个单位
+  86   3                      LED = 0xFF;         // 熄灭所有LED
+  87   3                      delay(1);           // 灭1个单位
+  88   3                      break;
+  89   3                      
+  90   3                  case 4:  // 100%亮度
+  91   3                      LED = led_pattern;  // 输出LED模式
+  92   3                      delay(4);           // 亮4个单位
+  93   3                      break;
+  94   3              }
+  95   2          }
+  96   1      }
+  97          
+  98          // 更新流水灯模式
+  99          void update_led_pattern() {
+ 100   1          // 判断是否所有LED都熄灭了
+ 101   1          if(led_pattern == 0xFF) {
+ 102   2              led_pattern = 0xFE;  // 重新开始，第一个LED亮
+ 103   2          } else {
+ 104   2              // 左移一位，最低位补1（实现流水效果）
+ 105   2              led_pattern = (led_pattern << 1) | 0x01;
+ 106   2          }
+ 107   1      }
+ 108          
+ 109          void main() {
+ 110   1          P1 = 0xFF;  // 启用P1口上拉电阻（按键输入）
+ 111   1          LED = 0x00; // 初始化LED端口
+ 112   1          
+ 113   1          // 启动前的初始效果
+ 114   1          brightness_delay();
+ 115   1          LED = 0xFE;  // 初始LED模式
+ 116   1          
+C51 COMPILER V9.54   CODE                                                                  05/14/2025 14:47:39 PAGE 3   
+
+ 117   1          while(1) {
+ 118   2              check_keys();         // 检测按键输入
+ 119   2              brightness_delay();   // 执行亮度控制延时
+ 120   2              update_led_pattern(); // 更新LED显示模式
+ 121   2          }
+ 122   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    226    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
