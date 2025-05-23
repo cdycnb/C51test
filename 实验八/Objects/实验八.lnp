@@ -1,0 +1,5 @@
+".\Objects\实验八.obj",
+".\Objects\app_waveform.obj",
+".\Objects\dac0832_driver.obj" 
+TO ".\Objects\实验八" 
+PRINT(".\Listings\实验八.m51")
