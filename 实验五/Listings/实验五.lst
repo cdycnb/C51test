@@ -1,0 +1,108 @@
+C51 COMPILER V9.54   ______                                                                05/14/2025 20:10:01 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE ______
+OBJECT MODULE PLACED IN .\Objects\ʵ����.obj
+COMPILER INVOKED BY: F:\keil5\core\C51\BIN\C51.EXE ʵ����.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings
+                    -\ʵ����.lst) TABS(2) OBJECT(.\Objects\ʵ����.obj)
+
+line level    source
+
+   1          #include <REGX51.H>
+   2          #include <intrins.h>
+   3          #define LCD_DataPort P0
+   4          sbit LCD_RS=P2^0;//仿真使用
+   5          sbit LCD_RW=P2^1;
+   6          sbit LCD_E=P2^2;
+   7          // 定义LCD延时函数，适用于12MHz时钟
+   8          void LCD_Delay()    
+   9          {
+  10   1       unsigned char i, j;
+  11   1      
+  12   1       i = 12;
+  13   1       j = 169;
+  14   1       do
+  15   1       {
+  16   2        while (--j);
+  17   2       } while (--i);
+  18   1      }
+  19          
+  20          // 写入命令到LCD
+  21          void LCD_WriteCommand(unsigned char Command)
+  22          {
+  23   1       LCD_RS=0;//命令状态
+  24   1       LCD_RW=0;
+  25   1       LCD_DataPort=Command;
+  26   1       LCD_E=1;//E引脚用于同步数据传输
+  27   1       LCD_Delay();
+  28   1       LCD_E=0;//执行命令
+  29   1       LCD_Delay();
+  30   1      }
+  31           
+  32          // 写入数据到LCD
+  33          void LCD_WriteData(unsigned char Data)
+  34          {
+  35   1       LCD_RS=1;//写入模式
+  36   1       LCD_RW=0;
+  37   1       LCD_DataPort=Data;
+  38   1       LCD_E=1;
+  39   1       LCD_Delay();
+  40   1       LCD_E=0;
+  41   1       LCD_Delay();
+  42   1      }
+  43           
+  44          // 设置LCD显示位置
+  45          void LCD_SetCursor(unsigned char Line, unsigned char Column)
+  46          {
+  47   1       if(Line==1)
+  48   1       {
+  49   2        LCD_WriteCommand(0x80|(Column-1));
+  50   2       }
+  51   1       else if(Line==2)
+  52   1       {
+  53   2        LCD_WriteCommand(0x80|(Column-1+0x40));
+  54   2       }//LCd有两行输出，每行的列数为16
+C51 COMPILER V9.54   ______                                                                05/14/2025 20:10:01 PAGE 2   
+
+  55   1      }
+  56          // 初始化LCD
+  57          void LCD_Init()
+  58          {
+  59   1       LCD_WriteCommand(0x38);//八位数据接口，两行显示，5*7点阵
+  60   1       LCD_WriteCommand(0x0c);//显示开，光标关，闪烁关
+  61   1       LCD_WriteCommand(0x06);//数据读写操作后，光标自动加一，画面不动
+  62   1       LCD_WriteCommand(0x01);//光标复位，清屏
+  63   1      }
+  64          
+  65          // 在指定位置显示字符串
+  66          void LCD_ShowString(unsigned char Line, unsigned char Column, char *String)
+  67          {
+  68   1       unsigned char i;
+  69   1       LCD_SetCursor(Line, Column);
+  70   1       for(i=0; String[i]!='\0'; i++)
+  71   1       {
+  72   2        LCD_WriteData(String[i]);
+  73   2       }
+  74   1      }
+  75           
+  76          // 主函数，程序入口
+  77          void main(){
+  78   1       LCD_Init();//初始化LCD1602
+  79   1       LCD_ShowString(1, 4, "qwq >_< ");//调用LCD_ShowString函数
+  80   1       LCD_ShowString(2, 4, "(-_-)//|-|");
+  81   1       while(1);
+  82   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    143    ----
+   CONSTANT SIZE    =     20    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
